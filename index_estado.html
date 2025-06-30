@@ -1,6 +1,3 @@
-
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -25,13 +22,12 @@
 
   <h2>Respuesta</h2>
   <div class="response" id="respuesta"></div>
+  <a href="index.html" class="back-button">⬅ Volver al Menú Principal</a>
 
   <script>
     async function consultarEstado() {
-      //https://gw.api.qa2.tbk.cl/transbank/clientes/api/v1/posi/estado/122343445/007f3dea-1022-4dcc-aec5-e4032c9c1cb6
-      //const clientId = document.getElementById("clientId").value;
-      const commerceCode = document.getElementById("commerceCode").value;
-      const traceId = document.getElementById("traceId").value;
+      const commerceCode = document.getElementById("commerceCode").value.trim();
+      const traceId = document.getElementById("traceId").value.trim();
       const responseBox = document.getElementById("respuesta");
 
       if (!commerceCode || !traceId) {
@@ -42,20 +38,30 @@
       responseBox.textContent = "Consultando...";
 
       try {
-        const res = await fetch(`https://gw.api.qa2.tbk.cl/transbank/clientes/api/v1/posi/estado/${commerceCode}/${traceId}`, {
+        const url = `https://gw.api.qa2.tbk.cl/transbank/clientes/api/v1/posi/estado/${encodeURIComponent(commerceCode)}/${encodeURIComponent(traceId)}`;
+
+        const res = await fetch(url, {
           method: "GET",
           headers: {
             "X-Client-Id": "003f624fe6c7c7492eaa55970d860de5"
           }
         });
 
+        console.log("Status:", res.status);
+
         if (res.status === 204) {
           responseBox.textContent = "No hay contenido disponible para esta transacción.";
           return;
         }
 
+        if (!res.ok) {
+          responseBox.textContent = `Error HTTP ${res.status}`;
+          return;
+        }
+
         const data = await res.json();
         responseBox.textContent = JSON.stringify(data, null, 2);
+
       } catch (error) {
         responseBox.textContent = `Error: ${error.message}`;
       }

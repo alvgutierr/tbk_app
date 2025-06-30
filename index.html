@@ -1,65 +1,34 @@
 
-
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
   <meta charset="UTF-8">
-  <title>Consulta Estado de Pago</title>
+  <title>Menú Principal POS Integrado</title>
   <style>
-    body { font-family: Arial, sans-serif; padding: 20px; max-width: 600px; margin: auto; }
-    input, button { display: block; margin: 10px 0; padding: 8px; width: 100%; }
-    .response { white-space: pre-wrap; background: #f0f0f0; padding: 10px; margin-top: 10px; border-radius: 5px; }
+    body { font-family: Arial, sans-serif; text-align: center; padding: 50px; background-color: #f9f9f9; }
+    h1 { margin-bottom: 40px; }
+    a {
+      display: block;
+      margin: 20px auto;
+      padding: 15px 30px;
+      width: 250px;
+      text-decoration: none;
+      background-color: #007BFF;
+      color: white;
+      border-radius: 5px;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+    }
+    a:hover {
+      background-color: #0056b3;
+    }
   </style>
 </head>
 <body>
-  <h1>Consultar Estado de Pago</h1>
+  <h1>POS Integrado - Menú Principal</h1>
 
-  <label>Código de Comercio</label>
-  <input type="text" id="commerceCode" value="122343445">
-
-  <label>Trace ID</label>
-  <input type="text" id="traceId" placeholder="UUID de la transacción">
-
-  <button onclick="consultarEstado()">Consultar Estado</button>
-
-  <h2>Respuesta</h2>
-  <div class="response" id="respuesta"></div>
-
-  <script>
-    async function consultarEstado() {
-      //https://gw.api.qa2.tbk.cl/transbank/clientes/api/v1/posi/estado/122343445/007f3dea-1022-4dcc-aec5-e4032c9c1cb6
-      //const clientId = document.getElementById("clientId").value;
-      const commerceCode = document.getElementById("commerceCode").value;
-      const traceId = document.getElementById("traceId").value;
-      const responseBox = document.getElementById("respuesta");
-
-      if (!commerceCode || !traceId) {
-        responseBox.textContent = "Todos los campos son obligatorios.";
-        return;
-      }
-
-      responseBox.textContent = "Consultando...";
-
-      try {
-        const res = await fetch(`https://gw.api.qa2.tbk.cl/transbank/clientes/api/v1/posi/estado/122343445/007f3dea-1022-4dcc-aec5-e4032c9c1cb6`, {
-          method: "GET",
-          headers: {
-            "X-Client-Id": "003f624fe6c7c7492eaa55970d860de5"
-          }
-        });
-
-        if (res.status === 204) {
-          responseBox.textContent = "No hay contenido disponible para esta transacción.";
-          return;
-        }
-
-        const data = await res.json();
-        responseBox.textContent = JSON.stringify(data, null, 2);
-      } catch (error) {
-        responseBox.textContent = `Error: ${error.message}`;
-      }
-    }
-  </script>
+  <a href="index_pago.html">📤 Publicar Pago</a>
+  <a href="index_estado.html">🔍 Consultar Estado</a>
+  <a href="index_impresion.html">🖨️ Enviar Impresión</a>
 </body>
 </html>
